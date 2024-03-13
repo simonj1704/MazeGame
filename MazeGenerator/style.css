@@ -1,0 +1,65 @@
+:root{
+    --GRID_WIDTH: 0;
+}
+
+body {
+    background-color: #444;
+    color: #8d8;
+}
+
+/* main {
+    display: flex;
+    gap: 1em;
+  } */
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(var(--GRID_WIDTH), max-content);
+    --border-color: #aaa;
+  }
+
+.cell {
+  border: 2px solid var(--border-color);
+  
+  width: 32px;
+  height: 32px;
+}
+
+.east {
+    border-right-color: transparent;
+  }
+  .west {
+    border-left-color: transparent;
+  }
+  .north {
+    border-top-color: transparent;
+  }
+  .south {
+    border-bottom-color: transparent;
+  }
+  
+  .start {
+    background-color: #1111a4;
+  }
+  
+  .end {
+    background-color: #a47111;
+  }
+
+  .visited {
+    background-color: #488a48;
+  }
+  
+  .visiting {
+    background-color: #f1fc91;
+  }
+  
+  .dead-end {
+    background-color: #663636;
+  }
+
+  #inputs{
+    display: flex;
+    gap: 1em;
+    
+  }
