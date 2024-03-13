@@ -20,7 +20,19 @@ export default class Controller {
     }
 
     start(){
+        this.newMaze();
         document.querySelector("#generate").addEventListener("click", this.newMaze.bind(this));
+        document.querySelector("#solve").addEventListener("click", this.tick.bind(this));
+        
+    }
+    
+    tick(){
+        //this.model.setVisitedCells();
+        this.model.run = true;
+        let cell = this.model.getCell(this.startPos.row, this.startPos.col);
+        this.model.depthFirstSearch(cell);
+        this.view.displayBoard(this.model.model);
+        //setTimeout(this.tick.bind(this), 1000)
     }
 
     newMaze(){
@@ -33,44 +45,29 @@ export default class Controller {
         this.view.displayBoard(this.generator.model);
         this.view.displayStart(this.generator.start);
         this.view.displayGoal(this.generator.goal);
+        this.model.setGoal(this.goal.row, this.goal.col);
+        console.log(this.model.model)
     }
 
-    gridHeight = 4;
-    gridWidth = 4;
-    startPos = {"row": 0, "col": 0};
-    goal = {"row": 2, "col": 3};
+    gridHeight = 0;
+    gridWidth = 0;
+    startPos = {};
+    goal = {};
 
-    json = {
-        "rows": 4,
-        "cols": 4,
-        "start": {"row": 0, "col": 0},
-        "goal": {"row": 2, "col": 3},
-        "maze":
-        [
-          [{"row":0,"col":0,"north":true,"east":true,"west":true,"south":false},
-           {"row":0,"col":1,"north":true,"east":false,"west":true,"south":false},
-           {"row":0,"col":2,"north":true,"east":false,"west":false,"south":true},
-           {"row":0,"col":3,"north":true,"east":true,"west":false,"south":false}],
-          [{"row":1,"col":0,"north":false,"east":false,"west":true,"south":true},
-           {"row":1,"col":1,"north":false,"east":true,"west":false,"south":true},
-           {"row":1,"col":2,"north":true,"east":false,"west":true,"south":false},
-           {"row":1,"col":3,"north":false,"east":true,"west":false,"south":true}],
-          [{"row":2,"col":0,"north":true,"east":false,"west":true,"south":false},
-           {"row":2,"col":1,"north":true,"east":true,"west":false,"south":true},
-           {"row":2,"col":2,"north":false,"east":true,"west":true,"south":false},
-           {"row":2,"col":3,"north":true,"east":true,"west":true,"south":false}],
-          [{"row":3,"col":0,"north":false,"east":false,"west":true,"south":true},
-           {"row":3,"col":1,"north":true,"east":false,"west":false,"south":true},
-           {"row":3,"col":2,"north":false,"east":false,"west":false,"south":true},
-           {"row":3,"col":3,"north":false,"east":true,"west":false,"south":true}]
-        ]
-      };
+    json = {};
 
     settings(json){
+        this.json = json;
         this.model.model = json.maze;
         this.gridHeight = json.rows;
         this.gridWidth = json.cols;
-        this.start = json.start;
+        this.model.width = json.cols;
+        this.model.height = json.rows;
+        this.startPos = json.start;
         this.goal = json.goal;
+    }
+
+    getSolution(){
+        this.model
     }
 }

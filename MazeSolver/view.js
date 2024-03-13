@@ -35,7 +35,9 @@ export default class View {
             const modelCell = model[i];
             const cell = cells[i];
 
-
+            if (modelCell.visited){
+                cell.classList.add("visited");
+            }
             const ways = ["north", "east", "south", "west"];
             for (let way of ways){
                 if(modelCell[way]){
