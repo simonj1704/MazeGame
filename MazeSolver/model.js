@@ -10,15 +10,15 @@ export default class Model {
 
     route = [];
     visitedCells = [];
+    deadends = [];
     width = 0;
     height = 0;
     goal = {};
 
     setVisitedCells(){
-        /* for (let cell of this.model){
+        for (let cell of this.model){
             cell.visited = false;
-        } */
-        console.log(this.model)
+        }
     }
 
     run = true;
@@ -33,7 +33,7 @@ export default class Model {
     }
     
     if (cell.visited) {
-        cell = this.route.pop();
+        this.deadends.push(cell)
         console.log("visited")
         return;
     }
@@ -80,14 +80,62 @@ export default class Model {
           this.depthFirstSearch(next);
       }
   }
+  
+  searchStep(cell){
+    let next;
+    if (!cell.east) {
+        next = this.getCell(cell.row, cell.col + 1);
+        this.route.push(next);
+    }
+    if (!cell.south) {
+        next = this.getCell(cell.row + 1, cell.col);
+        this.route.push(next);
+    }
+    if (!cell.west) {
+        next = this.getCell(cell.row, cell.col - 1);
+        this.route.push(next);
+    }
+    if (!cell.north) {
+        next = this.getCell(cell.row - 1, cell.col);
+        this.route.push(next);
+    }
+  }
+
+  step(cell){
+
+    if(cell == this.goal){
+        console.log("goal")
+        console.log(this.route)
+        return;
+    }
+    if (cell.visited) {
+        cell = this.route.pop();
+        console.log("visited")
+        return;
+    }
+    cell.visited = true;
+    this.route.push(cell);
+    this.searchStep(cell);
+
+  }
+
+  visitCell(cell){
+    cell.visited = true;
+    if(cell == this.goal){
+        console.log("goal")
+        console.log(this.route)
+        return;
+    }
+    let neighbours = this.getNeighbours(cell);
+    while(neighbours.length > 0){
+
+    }
+  }
 
   model = {};
 
   getNeighbours(cell) {
     let neighbours = [];
-    if (!cell.north) {
-      neighbours.push(this.getCell(cell.row - 1, cell.col));
-    }
     if (!cell.east) {
       neighbours.push(this.getCell(cell.row, cell.col + 1));
     }
@@ -96,6 +144,9 @@ export default class Model {
     }
     if (!cell.west) {
       neighbours.push(this.getCell(cell.row, cell.col - 1));
+    }
+    if (!cell.north) {
+      neighbours.push(this.getCell(cell.row - 1, cell.col));
     }
     neighbours = neighbours.filter((neighbour) => !neighbour.visited);
     return neighbours;

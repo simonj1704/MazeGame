@@ -22,17 +22,49 @@ export default class Controller {
     start(){
         this.newMaze();
         document.querySelector("#generate").addEventListener("click", this.newMaze.bind(this));
-        document.querySelector("#solve").addEventListener("click", this.tick.bind(this));
+        document.querySelector("#solve").addEventListener("click", this.automaticSolve.bind(this));
         
     }
     
-    tick(){
-        //this.model.setVisitedCells();
+    next = {
+        row: 0,
+        col: 0
+    };
+
+    solve(){
+        this.model.setVisitedCells();
+        let cell = this.model.getCell(this.next.row, this.next.col);
+        this.tick(cell);
+        this.view.displayBoard(this.model.model);
+    }
+
+    tick(cell){
+        if(cell == this.goal){
+            console.log("goal")
+            return;
+        }
+        if (cell.visited) {
+            this.next = this.model.route.pop();
+            return;
+        }
+        cell.visited = true;
+        const neighbours = this.model.getNeighbours(cell);
+    
+        console.log(neighbours)
+        this.next = neighbours[0];
+    }
+
+    showRoute(){
+        console.log(this.model.deadends)
+        this.view.showRoute(this.model.route, this.model.deadends)
+    }
+
+    automaticSolve(){
         this.model.run = true;
         let cell = this.model.getCell(this.startPos.row, this.startPos.col);
+        this.model.route.push(cell);
         this.model.depthFirstSearch(cell);
-        this.view.displayBoard(this.model.model);
-        //setTimeout(this.tick.bind(this), 1000)
+        this.showRoute();
     }
 
     newMaze(){

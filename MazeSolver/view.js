@@ -60,4 +60,28 @@ export default class View {
         const cell = cells[goal.row * this.gridwidth + goal.col];
         cell.classList.add("end");
     }
+
+    deadends = [];
+
+    showRoute(route, deadends){
+        this.deadends = deadends;
+        console.log(deadends)
+        route.forEach((cell, index) => {
+            setTimeout(() => {
+                this.addClass(cell);
+            }, (index + 1) * 200); 
+        });
+    }
+    
+
+    addClass(cell){
+        const cells = document.querySelectorAll("#board .cell");
+        const cell1 = cells[cell.row * this.gridwidth + cell.col];
+        if(cell1.classList.contains("visited") && this.deadends.includes(cell)){
+            cell1.classList.remove("visited");
+            cell1.classList.add("dead-end")
+        } else {
+            cell1.classList.add("visited");
+        }
+    }
 }
