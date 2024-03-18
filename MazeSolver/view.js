@@ -78,8 +78,8 @@ export default class View {
         const cells = document.querySelectorAll("#board .cell");
         const cell1 = cells[cell.row * this.gridwidth + cell.col];
         if(cell1.classList.contains("visited") && this.deadends.includes(cell)){
-            cell1.classList.remove("visited");
-            cell1.classList.add("dead-end")
+            //cell1.classList.remove("visited");
+            //cell1.classList.add("dead-end")
         } else {
             cell1.classList.add("visited");
         }
